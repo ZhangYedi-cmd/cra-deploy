@@ -2,7 +2,7 @@ name: CI
 # 每次push时进行lint，test....
 on: [ push ]
 jobs:
-  install:
+  lint:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -14,27 +14,21 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-  lint:
-    runs-on: ubuntu-18.04
-    needs: install
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
       - name: lintCode
         run: yarn build
 
+
   test:
     runs-on: ubuntu-18.04
-    needs: install
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
+
+      - name: Install Dependencies
+        run: yarn
 
       - name: lintCode
         run: npm run test
