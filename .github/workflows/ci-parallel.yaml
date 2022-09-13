@@ -1,21 +1,19 @@
-name: CI
-# 每次push时进行lint，test....
-on: [ push ]
+name: CI Parallel
+on: [push]
 jobs:
   install:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-
       - name: Install Dependencies
         run: yarn
-
   lint:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    # 通过 needs 字段可设置前置依赖的 Job，比如 install
     needs: install
     steps:
       - uses: actions/checkout@v2
@@ -23,11 +21,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - name: lintCode
-        run: yarn build
-
+      - name: ESLint
+        run: npm run build
   test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     needs: install
     steps:
       - uses: actions/checkout@v2
@@ -35,10 +32,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-
-      - name: lintCode
+      - name: Test
         run: npm run test
-
-
-
-
+  preview:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - run: echo 'Preview OK'
