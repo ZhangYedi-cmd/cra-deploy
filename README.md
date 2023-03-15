@@ -96,3 +96,6 @@ $ cat k8s-preview-app.yaml | COMMIT_REF_NAME=$(git rev-parse --abbrev-ref HEAD) 
 
 $ kubectl apply -f temp.k8s-app.yaml
 ```
+
+
+# 测试
